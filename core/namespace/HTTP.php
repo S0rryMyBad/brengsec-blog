@@ -230,5 +230,26 @@ class HTTP {
 			header($header);
 		}
 	}
+
+	#===============================================================================
+	# Anti CSRF Token // thanks to ekasyahwan :)
+	#===============================================================================
+	public static function csrfToken() {
+		$token = md5(date("dmY h:i:s").rand(10000,90000));
+		$_SESSION['token'] = $token;
+		return $_SESSION['token'];
+	}
+
+	public static function csrfValidate($token) {
+		if ($token != $_SESSION['token']) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public static function csrfHtml() {
+		echo '<input type="hidden" name="token" value="'.$this->csrfToken().'"></input>';
+	}
 }
 ?>
